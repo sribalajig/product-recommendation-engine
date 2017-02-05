@@ -1,10 +1,10 @@
 package persistence
 
 import (
-	"encoding/json"
+	"gopkg.in/olivere/elastic.v5"
 )
 
 /*ResultTransformer is an interface for specifying how result transformation happens*/
 type ResultTransformer interface {
-	Transform(raw *json.RawMessage) (interface{}, error)
+	Transform(searchHit *elastic.SearchHit) (interface{}, error)
 }

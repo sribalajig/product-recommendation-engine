@@ -1,34 +1,27 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"home24/core"
 	"home24/persistence"
 	"home24/recommendation/engine"
-	"reflect"
+	"home24/recommendation/product"
 )
 
 func main() {
-	filter := core.Filter{
-		Name:  "name",
-		Value: "sku-35",
-	}
-
-	filters := []core.Filter{
-		filter,
-	}
-
 	core.Provider = persistence.NewElasticProvider()
+	engine.DataProvider = persistence.NewElasticProvider()
 
-	result, err := core.Get(filters, reflect.TypeOf(core.Product{}))
+	recommendedProducts, err := product.GetRecommendations("sku-12")
 
-	if err == nil {
-		fmt.Println(result)
-	} else {
+	if err != nil {
 		fmt.Println(err)
+
+		return
 	}
 
-	_ = result.(core.Product)
+	result, _ := json.MarshalIndent(recommendedProducts, "", "\t")
 
-	engine.Get(engine.Request{})
+	fmt.Println(string(result))
 }

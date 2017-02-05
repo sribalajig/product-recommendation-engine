@@ -25,12 +25,15 @@ func NewElasticProvider() ElasticProvider {
 	}
 }
 
-/*Get is a specific implementation for elastic search*/
-func (elasticProvider ElasticProvider) Get(filters []core.Filter, typ reflect.Type) (interface{}, error) {
+func (elasticProvider ElasticProvider) Get(predicates []core.Predicate, typ reflect.Type) (interface{}, error) {
 	baseQuery := elasticProvider.elasticClient.Search().Index("home24-test")
 
-	for _, filter := range filters {
-		termQuery := elastic.NewTermQuery(filter.Name, filter.Value)
+	for _, predicate := range predicates {
+		termQuery := elastic.NewTermQuery(predicate.Name, predicate.Value)
+
+		if predicate.Weight != nil {
+			termQuery.Boost(predicate.Weight.(float64))
+		}
 
 		baseQuery = baseQuery.Query(termQuery)
 	}
@@ -51,5 +54,17 @@ func (elasticProvider ElasticProvider) Get(filters []core.Filter, typ reflect.Ty
 		return nil, tranErr
 	}
 
-	return transformer.Transform(searchResult.Hits.Hits[0].Source)
+	var items []interface{}
+
+	for _, hit := range searchResult.Hits.Hits {
+		result, transformErr := transformer.Transform(hit)
+
+		if transformErr != nil {
+			return nil, transformErr
+		}
+
+		items = append(items, result)
+	}
+
+	return items, nil
 }

@@ -5,7 +5,7 @@ import (
 )
 
 type Request struct {
-	RecommendationType reflect.Type
-	WeightedAttributes []WeightedAttribute
-	PaginationOptions  Pagination
+	DesiredRecommendationType reflect.Type
+	WeightedAttributes        []WeightedAttribute
+	PaginationOptions         Pagination
 }

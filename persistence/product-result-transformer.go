@@ -3,6 +3,7 @@ package persistence
 import (
 	"encoding/json"
 	"fmt"
+	"gopkg.in/olivere/elastic.v5"
 	"home24/core"
 )
 
@@ -10,11 +11,11 @@ import (
 type ProductResultTransformer struct {
 }
 
-/*Transform converts a raw Json string into a Product struct*/
-func (productResultTransformer ProductResultTransformer) Transform(raw *json.RawMessage) (interface{}, error) {
+/*Transform converts an elastic search hit into a Product struct*/
+func (productResultTransformer ProductResultTransformer) Transform(searchHit *elastic.SearchHit) (interface{}, error) {
 	productWithAttributes := make(map[string]string)
 
-	err := json.Unmarshal(*raw, &productWithAttributes)
+	err := json.Unmarshal(*searchHit.Source, &productWithAttributes)
 
 	if err != nil {
 		return nil, fmt.Errorf("Could not deserialize : %s", err.Error())
