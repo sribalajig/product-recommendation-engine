@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"home24/core"
 	"home24/persistence"
+	"home24/recommendation/engine"
 	"reflect"
 )
 
@@ -19,11 +20,15 @@ func main() {
 
 	core.Provider = persistence.NewElasticProvider()
 
-	results, err := core.Get(filters, reflect.TypeOf(core.Product{}))
+	result, err := core.Get(filters, reflect.TypeOf(core.Product{}))
 
 	if err == nil {
-		fmt.Println(results)
+		fmt.Println(result)
 	} else {
 		fmt.Println(err)
 	}
+
+	_ = result.(core.Product)
+
+	engine.Get(engine.Request{})
 }
