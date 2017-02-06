@@ -36,5 +36,5 @@ func (productResultTransformer ProductResultTransformer) Transform(searchHit *el
 		})
 	}
 
-	return product, nil
+	return core.RecommendationResult{Item: product, Score: *searchHit.Score}, nil
 }

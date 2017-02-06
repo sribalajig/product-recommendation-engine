@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-func GetRecommendations(productCode string) ([]core.Product, error) {
+func GetRecommendations(productCode string) ([]core.RecommendationResult, error) {
 	product, err := GetProduct(productCode)
 
 	if err != nil {
@@ -25,10 +25,12 @@ func GetRecommendations(productCode string) ([]core.Product, error) {
 		return nil, recErr
 	}
 
-	var products []core.Product
+	var products []core.RecommendationResult
 
 	for _, reco := range recommendations.([]interface{}) {
-		products = append(products, reco.(core.Product))
+		scoredProduct := reco.(core.RecommendationResult)
+
+		products = append(products, scoredProduct)
 	}
 
 	return products, nil
@@ -48,5 +50,7 @@ func GetProduct(productCode string) (core.Product, error) {
 		return core.Product{}, err
 	}
 
-	return result.(core.Product), nil
+	scoredResult := result.(core.RecommendationResult)
+
+	return scoredResult.Item.(core.Product), nil
 }

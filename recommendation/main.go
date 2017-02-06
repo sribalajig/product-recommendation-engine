@@ -13,7 +13,7 @@ func main() {
 	core.Provider = persistence.NewElasticProvider()
 	engine.DataProvider = persistence.NewElasticProvider()
 
-	recommendedProducts, err := product.GetRecommendations("sku-12")
+	recommendedProducts, err := product.GetRecommendations("sku-449")
 
 	if err != nil {
 		fmt.Println(err)

@@ -25,8 +25,14 @@ func NewElasticProvider() ElasticProvider {
 	}
 }
 
-func (elasticProvider ElasticProvider) Get(predicates []core.Predicate, typ reflect.Type) (interface{}, error) {
+func (elasticProvider ElasticProvider) Get(
+	predicates []core.Predicate,
+	index int,
+	numItems int,
+	typ reflect.Type) (interface{}, error) {
 	baseQuery := elasticProvider.elasticClient.Search().Index("home24-test")
+
+	boolQuery := elastic.NewBoolQuery()
 
 	for _, predicate := range predicates {
 		termQuery := elastic.NewTermQuery(predicate.Name, predicate.Value)
@@ -35,10 +41,12 @@ func (elasticProvider ElasticProvider) Get(predicates []core.Predicate, typ refl
 			termQuery.Boost(predicate.Weight.(float64))
 		}
 
-		baseQuery = baseQuery.Query(termQuery)
+		boolQuery = boolQuery.Should(termQuery)
 	}
 
-	searchResult, searchErr := baseQuery.Do(context.Background())
+	baseQuery = baseQuery.Query(boolQuery)
+
+	searchResult, searchErr := baseQuery.Sort("_score", false).From(index).Size(numItems).Do(context.Background())
 
 	if searchErr != nil {
 		return nil, errors.New("There was an error while performing the search")
