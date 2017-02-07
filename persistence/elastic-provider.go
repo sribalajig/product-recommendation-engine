@@ -5,7 +5,6 @@ import (
 	"golang.org/x/net/context"
 	"gopkg.in/olivere/elastic.v5"
 	"home24/core/provider"
-	"reflect"
 )
 
 type ElasticProvider struct {
@@ -25,16 +24,12 @@ func NewElasticProvider() ElasticProvider {
 	}
 }
 
-func (elasticProvider ElasticProvider) Get(
-	predicates []provider.Predicate,
-	index int,
-	numItems int,
-	typ reflect.Type) (interface{}, error) {
+func (elasticProvider ElasticProvider) Get(request provider.Request) (interface{}, error) {
 	baseQuery := elasticProvider.elasticClient.Search().Index("home24-test")
 
 	boolQuery := elastic.NewBoolQuery()
 
-	for _, predicate := range predicates {
+	for _, predicate := range request.Predicates {
 		termQuery := elastic.NewTermQuery(predicate.Name, predicate.Value)
 
 		if predicate.Weight != nil {
@@ -50,7 +45,7 @@ func (elasticProvider ElasticProvider) Get(
 
 	baseQuery = baseQuery.Query(boolQuery)
 
-	searchResult, searchErr := baseQuery.Sort("_score", false).From(index).Size(numItems).Do(context.Background())
+	searchResult, searchErr := baseQuery.Sort("_score", false).From(request.Index).Size(request.NumItems).Do(context.Background())
 
 	if searchErr != nil {
 		return nil, errors.New("There was an error while performing the search")
@@ -60,7 +55,7 @@ func (elasticProvider ElasticProvider) Get(
 		return nil, errors.New("No matching results for given filters")
 	}
 
-	transformer, tranErr := Create(typ)
+	transformer, tranErr := Create(request.Typ)
 
 	if tranErr != nil {
 		return nil, tranErr

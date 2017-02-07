@@ -30,7 +30,14 @@ func Get(request Request) (interface{}, error) {
 		})
 	}
 
-	result, err := DataProvider.Get(predicates, 0, 10, reflect.TypeOf(models.Product{}))
+	providerRequest := provider.Request{
+		Predicates: predicates,
+		Typ:        reflect.TypeOf(models.Product{}),
+		Index:      0,
+		NumItems:   10,
+	}
+
+	result, err := DataProvider.Get(providerRequest)
 
 	if err != nil {
 		return nil, fmt.Errorf("There was an error retrieving data : %s", err.Error())
