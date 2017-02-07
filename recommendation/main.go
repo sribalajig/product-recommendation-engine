@@ -3,14 +3,14 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"home24/core"
+	"home24/core/repository"
 	"home24/persistence"
 	"home24/recommendation/engine"
 	"home24/recommendation/product"
 )
 
 func main() {
-	core.Provider = persistence.NewElasticProvider()
+	repository.DataProvider = persistence.NewElasticProvider()
 	engine.DataProvider = persistence.NewElasticProvider()
 
 	recommendedProducts, err := product.GetRecommendations("sku-449")

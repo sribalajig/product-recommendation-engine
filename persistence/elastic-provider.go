@@ -4,7 +4,7 @@ import (
 	"errors"
 	"golang.org/x/net/context"
 	"gopkg.in/olivere/elastic.v5"
-	"home24/core"
+	"home24/core/provider"
 	"reflect"
 )
 
@@ -26,7 +26,7 @@ func NewElasticProvider() ElasticProvider {
 }
 
 func (elasticProvider ElasticProvider) Get(
-	predicates []core.Predicate,
+	predicates []provider.Predicate,
 	index int,
 	numItems int,
 	typ reflect.Type) (interface{}, error) {

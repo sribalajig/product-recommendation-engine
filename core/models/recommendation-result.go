@@ -1,4 +1,4 @@
-package core
+package models
 
 type RecommendationResult struct {
 	Item  interface{}

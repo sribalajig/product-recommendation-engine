@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gopkg.in/olivere/elastic.v5"
-	"home24/core"
+	"home24/core/models"
 )
 
 /*ProductResultTransformer trnasforms a raw json message to a Product struct*/
@@ -21,7 +21,7 @@ func (productResultTransformer ProductResultTransformer) Transform(searchHit *el
 		return nil, fmt.Errorf("Could not deserialize : %s", err.Error())
 	}
 
-	var product core.Product
+	var product models.Product
 
 	for key := range productWithAttributes {
 		if key == "name" {
@@ -30,11 +30,11 @@ func (productResultTransformer ProductResultTransformer) Transform(searchHit *el
 			continue
 		}
 
-		product.Attributes = append(product.Attributes, core.Attribute{
+		product.Attributes = append(product.Attributes, models.Attribute{
 			Name:  key,
 			Value: productWithAttributes[key],
 		})
 	}
 
-	return core.RecommendationResult{Item: product, Score: *searchHit.Score}, nil
+	return models.RecommendationResult{Item: product, Score: *searchHit.Score}, nil
 }

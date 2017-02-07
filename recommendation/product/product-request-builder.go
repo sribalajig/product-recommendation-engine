@@ -1,12 +1,12 @@
 package product
 
 import (
-	"home24/core"
+	"home24/core/models"
 	"home24/recommendation/engine"
 	"reflect"
 )
 
-func Build(attributes []core.Attribute) (engine.Request, error) {
+func Build(attributes []models.Attribute) (engine.Request, error) {
 	var weightedAttributes []engine.WeightedAttribute
 
 	for _, attr := range attributes {
@@ -23,7 +23,7 @@ func Build(attributes []core.Attribute) (engine.Request, error) {
 	}
 
 	request := engine.Request{
-		DesiredRecommendationType: reflect.TypeOf(core.Product{}),
+		DesiredRecommendationType: reflect.TypeOf(models.Product{}),
 		WeightedAttributes:        weightedAttributes,
 		PaginationOptions: engine.Pagination{
 			NumberOfItems: 10,

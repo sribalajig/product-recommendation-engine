@@ -1,4 +1,4 @@
-package core
+package provider
 
 type Predicate struct {
 	Name   string

@@ -1,10 +1,10 @@
 package engine
 
 import (
-	"home24/core"
+	"home24/core/models"
 )
 
 type WeightedAttribute struct {
-	Attribute core.Attribute
+	Attribute models.Attribute
 	Weight    Weight
 }
