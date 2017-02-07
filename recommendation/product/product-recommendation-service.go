@@ -15,7 +15,7 @@ func GetRecommendations(productCode string) ([]models.RecommendationResult, erro
 		return nil, err
 	}
 
-	request, reqErr := Build(product.Attributes)
+	request, reqErr := Build(product)
 
 	if reqErr != nil {
 		return nil, reqErr

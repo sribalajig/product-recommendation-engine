@@ -15,13 +15,22 @@ func Get(request Request) (interface{}, error) {
 
 	for _, weightedAttribute := range request.WeightedAttributes {
 		predicates = append(predicates, provider.Predicate{
-			Name:   weightedAttribute.Attribute.Name,
-			Value:  weightedAttribute.Attribute.Value,
-			Weight: weightedAttribute.Weight.Value,
+			Name:               weightedAttribute.Attribute.Name,
+			Value:              weightedAttribute.Attribute.Value,
+			Weight:             weightedAttribute.Weight.Value,
+			ComparisonOperator: "EqualTo",
 		})
 	}
 
-	result, err := DataProvider.Get(predicates, 0, 11, reflect.TypeOf(models.Product{}))
+	for _, exclusionItem := range request.ExclusionList {
+		predicates = append(predicates, provider.Predicate{
+			Name:               exclusionItem.Key.(string),
+			Value:              exclusionItem.Value.(string),
+			ComparisonOperator: "NotEqualTo",
+		})
+	}
+
+	result, err := DataProvider.Get(predicates, 0, 10, reflect.TypeOf(models.Product{}))
 
 	if err != nil {
 		return nil, fmt.Errorf("There was an error retrieving data : %s", err.Error())

@@ -41,7 +41,11 @@ func (elasticProvider ElasticProvider) Get(
 			termQuery.Boost(predicate.Weight.(float64))
 		}
 
-		boolQuery = boolQuery.Should(termQuery)
+		if predicate.ComparisonOperator == "EqualTo" {
+			boolQuery = boolQuery.Should(termQuery)
+		} else if predicate.ComparisonOperator == "NotEqualTo" {
+			boolQuery = boolQuery.MustNot(termQuery)
+		}
 	}
 
 	baseQuery = baseQuery.Query(boolQuery)
