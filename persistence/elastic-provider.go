@@ -11,7 +11,7 @@ type ElasticProvider struct {
 	elasticClient *elastic.Client
 }
 
-/*NewElasticProvider is a factory methos*/
+/*NewElasticProvider is a factory method*/
 func NewElasticProvider() ElasticProvider {
 	client, err := elastic.NewClient()
 
@@ -45,7 +45,11 @@ func (elasticProvider ElasticProvider) Get(request provider.Request) (interface{
 
 	baseQuery = baseQuery.Query(boolQuery)
 
-	searchResult, searchErr := baseQuery.Sort("_score", false).From(request.Index).Size(request.NumItems).Do(context.Background())
+	searchResult, searchErr := baseQuery.
+		Sort("_score", false).
+		From(request.Index).
+		Size(request.NumItems).
+		Do(context.Background())
 
 	if searchErr != nil {
 		return nil, errors.New("There was an error while performing the search")
