@@ -25,7 +25,7 @@ func NewElasticProvider() ElasticProvider {
 }
 
 func (elasticProvider ElasticProvider) Get(request provider.Request) (interface{}, error) {
-	baseQuery := elasticProvider.elasticClient.Search().Index("home24-test")
+	baseQuery := elasticProvider.elasticClient.Search().Index("home24")
 
 	boolQuery := elastic.NewBoolQuery()
 
