@@ -55,10 +55,6 @@ func (elasticProvider ElasticProvider) Get(request provider.Request) (interface{
 		return nil, errors.New("There was an error while performing the search")
 	}
 
-	if searchResult.TotalHits() == 0 {
-		return nil, errors.New("No matching results for given filters")
-	}
-
 	transformer, tranErr := Create(request.Typ)
 
 	if tranErr != nil {

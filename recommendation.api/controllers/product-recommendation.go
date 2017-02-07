@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/astaxie/beego"
+	"home24/recommendation.api/models"
 	"home24/recommendation/product"
 )
 
@@ -16,7 +17,7 @@ func (productRecommendationController *ProductRecommendationController) GetRecom
 
 	if err != nil {
 		productRecommendationController.Ctx.Output.SetStatus(500)
-		productRecommendationController.Ctx.Output.JSON(err, false, false)
+		productRecommendationController.Ctx.Output.JSON(models.Error{Message: err.Error()}, false, false)
 	} else {
 		productRecommendationController.Ctx.Output.JSON(recommendedProducts, false, false)
 	}
