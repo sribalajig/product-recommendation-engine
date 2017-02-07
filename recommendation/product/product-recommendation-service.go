@@ -41,8 +41,9 @@ func GetRecommendations(productCode string) ([]models.RecommendationResult, erro
 func GetProduct(productCode string) (models.Product, error) {
 	predicates := []provider.Predicate{
 		provider.Predicate{
-			Name:  "name",
-			Value: productCode,
+			Name:               "name",
+			Value:              productCode,
+			ComparisonOperator: "EqualTo",
 		},
 	}
 
