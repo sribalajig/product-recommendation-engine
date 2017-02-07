@@ -309,4 +309,11 @@ curl -XPUT 'localhost:9200/home24' -H 'Content-Type: application/json' -d'
       }
 }
 '
+
+sudo npm install elastic-import --global
+
 elastic-import attributes.json localhost:9200 home24 products --mongo
+
+go get github.com/astaxie/beego
+
+go get gopkg.in/olivere/elastic.v5

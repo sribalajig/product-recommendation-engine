@@ -1,20 +1,23 @@
-1. Install Elasticsearch => https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html. You can verify whether the installation works by executing the following command => "curl -i -XGET 'localhost:9200/'"
+System requirements
 
-2. We need a tool called elastic-import to load data into elastic search. First install npm (node package manager). Then execute the following command => "sudo npm install elastic-import --global"
+1. Install Elasticsearch => https://www.elastic.co/guide/en/elasticsearch/reference/current/_installation.html. Make sure elastic search is running => "curl -i -XGET 'localhost:9200/'"
 
-3. Import the product attribute data into elastic search. Navigate to the /data folder. You will see a file called setup.sh. Execute "sh setup.sh" in the command line. This will import data into elastic search.
+2. Install Golang => https://golang.org/doc/install. This project is implemented in Golang.
 
-4. Install Golang => https://golang.org/doc/install
+3. Install npm (node package manager).
 
-5. Install beego which is a micro web/api framework for Go. Execute "go get github.com/astaxie/beego" in the command line.
+Running the application
 
-6. Install the elastic library for Golang => Execute "go get gopkg.in/olivere/elastic.v5" in the command line.
+1. Navigate to /setup. Run "sh setup.sh". This will import data to elastic search and install the Go dependencies. You will be prompted for your password.
 
-7. Navigate to /recommendations.api. Execute "bee run".
+2. Navigate to /recommendations.api. Execute "bee run". Bee is a micro-framework for Golang => https://beego.me/docs/install/
 
-8. The runs on port 8080. You can try out the following request from any HTTP client :
+HTTP Requests to test the engine
+
+1. The recommendation service runs on port 8080. You can try out the following request from any HTTP client =>
 
 	http://localhost:8080/api/products/sku-7/recommendations
 
 	You can replace sku-7 with any valid product id.
-9. There is a test for the recommendation engine. Go to the root directory and execute "go test ./..." to run the test.
+
+2. There is a test for the recommendation engine. Go to the root directory and execute "go test ./..." to run the test.
