@@ -14,7 +14,7 @@
 
 ##HTTP Requests to test the engine
 
-1. The recommendation service runs on port 8080. You can try out the following request from any HTTP client =>
+1. The recommendation service runs on port 8080. You can try out the following GET request from any HTTP client =>
 
 	http://localhost:8080/api/products/sku-7/recommendations
 
