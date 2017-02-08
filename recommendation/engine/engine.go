@@ -33,8 +33,8 @@ func Get(request Request) (interface{}, error) {
 	providerRequest := provider.Request{
 		Predicates: predicates,
 		Typ:        reflect.TypeOf(models.Product{}),
-		Index:      0,
-		NumItems:   10,
+		Index:      request.PaginationOptions.StartIndex,
+		NumItems:   request.PaginationOptions.NumberOfItems,
 	}
 
 	result, err := DataProvider.Get(providerRequest)
