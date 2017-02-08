@@ -9,6 +9,7 @@ import (
 
 type ElasticProvider struct {
 	elasticClient *elastic.Client
+	queryBuilder  QueryBuilder
 }
 
 /*NewElasticProvider is a factory method*/
@@ -21,31 +22,14 @@ func NewElasticProvider() ElasticProvider {
 
 	return ElasticProvider{
 		elasticClient: client,
+		queryBuilder:  QueryBuilder{},
 	}
 }
 
 func (elasticProvider ElasticProvider) Get(request provider.Request) (interface{}, error) {
-	baseQuery := elasticProvider.elasticClient.Search().Index("home24")
+	query := elasticProvider.queryBuilder.Build(elasticProvider.elasticClient, request)
 
-	boolQuery := elastic.NewBoolQuery()
-
-	for _, predicate := range request.Predicates {
-		termQuery := elastic.NewTermQuery(predicate.Name, predicate.Value)
-
-		if predicate.Weight != nil {
-			termQuery.Boost(predicate.Weight.(float64))
-		}
-
-		if predicate.ComparisonOperator == "EqualTo" {
-			boolQuery = boolQuery.Should(termQuery)
-		} else if predicate.ComparisonOperator == "NotEqualTo" {
-			boolQuery = boolQuery.MustNot(termQuery)
-		}
-	}
-
-	baseQuery = baseQuery.Query(boolQuery)
-
-	searchResult, searchErr := baseQuery.
+	searchResult, searchErr := query.
 		Sort("_score", false).
 		From(request.Index).
 		Size(request.NumItems).
