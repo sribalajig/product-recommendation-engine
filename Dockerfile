@@ -16,4 +16,4 @@ RUN go get -u gopkg.in/olivere/elastic.v5
 
 RUN export PATH=$PATH:$GOPATH/bin
 
-RUN bee run /go/src/home24/recommendation.api
+CMD bee run /go/src/home24/recommendation.api
